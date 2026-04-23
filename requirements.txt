@@ -1,0 +1,6 @@
+pandas
+matplotlib
+flask
+APScheduler
+jinja2
+xhtml2pdf
