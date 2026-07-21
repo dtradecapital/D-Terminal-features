@@ -1,34 +1,76 @@
-# DTrade Capital - Features
+# Nexus Trading Dashboard
 
-This repository contains the core behavioral analysis and risk detection features for the DTrade Capital platform.
+A premium, interactive multi-page Streamlit application designed to parse, analyze, and visualize trading logs. Includes a psychological assessment based on trading metrics and behavioral timelines.
 
 ## Features
 
-### 1. My Behavior Page
-- **Description**: Focused on time-series analysis of trade logs.
-- **Core Logic**: EVI (Edge, Value, Impact) score calculator from trade logs.
-- **Output**: EVI history chart visualizations.
+- **Overview Metrics**: KPI cards for Net P/L, Win Rate, Best/Worst trades, and Profit Factor calculations.
+- **Psychological Analysis**: Trailing evaluation across 6 trading phases (Builder, Gambler, Scalper, Risk-Taker, Reckless, Survivor).
+- **Interactive Visualizations**: Cumulative Equity curves, Monthly Net P/L bar graphs, Instrument breakdown donuts, and Drawdown profiles.
+- **Searchable Logging**: Filter and search through historical trades dynamically by symbols, types, or profitability ranges.
 
-### 2. Pattern Detection
-- **Description**: Rule-based detection of negative trading behaviors.
-- **Core Logic**: Detects revenge trades, FOMO (Fear Of Missing Out), and size drift.
-- **Output**: Flag counts and danger hour heatmaps.
+## Project Structure
 
-### 3. My Genome Page
-- **Description**: Trader classification using behavioral features.
-- **Core Logic**: K-Means clustering to categorize traders into specific archetypes.
-- **Output**: Archetype labels (requires > 50 trades).
+```text
+trading-dashboard/
+├── app.py                      # Main Landing Page
+├── requirements.txt            # Python Dependencies
+├── runtime.txt                 # Python Runtime version
+├── packages.txt                # OS packages for Streamlit Cloud
+├── .gitignore                  # Git exclusion rules
+├── .streamlit/
+│   └── config.toml             # Custom Dark Theme configuration
+├── data/
+│   └── trading_data.xlsx       # Excel data file (User-uploaded or auto-generated template)
+├── pages/
+│   ├── 01_overview.py          # KPI Cards & Summary Statistics
+│   ├── 02_emotional.py         # Psychological timeline & Diagnostic
+│   ├── 03_charts.py            # Plotly Equity & Drawdown curves
+│   └── 04_analysis.py          # Top 5 list & filterable data records
+├── utils/
+│   └── data_loader.py          # Excel sheet processing & mock-data fallback logic
+├── assets/
+│   └── style.css               # Premium CSS glassmorphism & timeline styling
+└── README.md                   # Setup and deployment documentation
+```
 
-### 4. Behavioral Fitness Score
-- **Description**: Multi-metric scoring model for weekly performance.
-- **Core Logic**: Weighted metrics formula derived from trade behavior data.
-- **Output**: Weekly scorecard and 8-week performance bar charts.
+## Setup & Local Installation
 
-### 5. Weekly Email + Plan Gating
-- **Description**: Automated reporting and account level gating.
-- **Core Logic**: Summary generation for reports and access flag management.
-- **Output**: Monday email reports and free/basic access control.
+1. Navigate to the project directory:
+   ```bash
+   cd trading-dashboard
+   ```
 
-## Contribution Guidelines
-Please upload your code to the corresponding feature folder. Ensure your Python scripts follow the project's coding standards.
-"# D-Terminal-features" 
+2. Install the required Python packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Launch the dashboard locally:
+   ```bash
+   streamlit run app.py
+   ```
+
+## Excel Data Format
+
+Place your Excel trade sheet in the `data/` folder as `trading_data.xlsx`. Ensure it has the following columns (exactly case-sensitive):
+- `Open Time` (Format: `YYYY-MM-DD HH:MM:SS`)
+- `Type` (`Buy` or `Sell`)
+- `Volume` (Lot sizing, e.g. `0.10`, `1.00`)
+- `Symbol` (Instrument name, e.g. `EURUSD`, `XAUUSD`, `BTCUSD`)
+- `Price` (Open Price)
+- `Close Time` (Format: `YYYY-MM-DD HH:MM:SS`)
+- `Price` (Close Price - will be loaded as `Price.1` automatically)
+- `Commission` (Negative or zero fee value, e.g. `-3.50`)
+- `Swap` (Negative or zero interest value, e.g. `-1.20`)
+- `Profit` (Gross profit/loss)
+
+*Note: If no file is detected, the dashboard automatically initializes a template Excel file with realistic mock data to showcase features instantly.*
+
+## Streamlit Cloud Deployment
+
+To deploy this dashboard to Streamlit Cloud (Anti-Gravity):
+1. Push this `trading-dashboard` directory to a GitHub repository.
+2. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/).
+3. Click **New App**, then select your repository, branch, and set the Main file path to `app.py`.
+4. Click **Deploy**. The environment will read the `requirements.txt` and `runtime.txt` to configure everything automatically.
